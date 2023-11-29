@@ -3,8 +3,8 @@ import fs from "fs";
 
 import * as cannon from "cannon-es";
 import * as three from "three";
-
 import {OBJLoader} from "./util/OBJLoader";
+
 import CannonUtils from "./util/cannonUtils";
 
 export default class Physics {
@@ -16,7 +16,7 @@ export default class Physics {
     constructor() {
         const loader = new OBJLoader();
         const data = fs.readFileSync("src/client/models/groundmap.obj");
-        const obj = loader.parse(data);
+        const obj = loader.parse(data.toString());
         obj.traverse((child:three.Object3D) => {
             if((child as three.Mesh).isMesh) {
                 const mesh = child as three.Mesh;

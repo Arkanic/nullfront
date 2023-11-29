@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Nullfront</title>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <canvas id="game"></canvas>
+        <div class="play-menu hidden" id="play-menu">
+            <h1>Nullfront</h1>
+            <p>don't die</p>
+            <p>keyboard controls + mouse</p>
+            <input type="text" placeholder="Username" id="username-input">
+            <button id="play-button">PLAY</button>
+        </div>
+        <div class="hidden disconnected" id="disconnected">
+            <div>
+                <h2>Disconnected from Game Server</h2>
+                <p id="disconnect-message"></p>
+                <hr><button id="reconnect-button">Reconnect</button>
+            </div>
+        </div>
+    </body>
+</html>
