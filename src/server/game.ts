@@ -12,12 +12,12 @@ import Physics from "./physics";
 import * as Data from "../shared/types/inputObject";
 import * as serializedData from "../shared/types/serializedData";
 import constants from "../shared/constants";
+import { Vector3 } from "three";
 
 class Game {
     sockets:{[key:string]:Socket};
     players:{[key:string]:Player};
     entities:{[key:string]:Entity};
-    staticEntities:{[key:string]:Entity};
 
     physics:Physics;
 
@@ -28,7 +28,6 @@ class Game {
         this.sockets = {};
         this.players = {};
         this.entities = {};
-        this.staticEntities = {};
 
         this.physics = new Physics();
 
@@ -49,4 +48,61 @@ class Game {
         this.physics.world.removeBody(this.entities[id].body);
         delete this.entities[id];
     }
+
+    addPlayer(socket:io.Socket, data:Data.Join):void {
+        this.sockets[socket.id] = new Socket(socket);
+
+        const position = new Vector3((Math.random() * 200) - 100, 60, (Math.random() * 200) - 100);
+        this.players[socket.id] = new Player(socket.id, striptags(data.username), position);
+
+        this.physics.world.addBody(this.players[socket.id].body);
+    }
+
+    removePlayer(socket:io.Socket):void {
+        if(this.players[socket.id]) this.physics.world.removeBody(this.players[socket.id].body);
+
+        delete this.players[socket.id];
+        delete this.sockets[socket.id];
+    }
+
+    update():void {
+        this.now = Date.now();
+        let dt = (this.now - this.then) / 1000;
+
+        this.physics.world.step(1 / 60, dt, 3);
+
+        Object.keys(this.entities).forEach(id => {
+            const entity = this.entities[id];
+            entity.update();
+        });
+
+        Object.keys(this.players).forEach(id => {
+            const player = this.players[id];
+            player.update();
+        });
+
+        Object.keys(this.sockets).forEach(id => {
+            const socket = this.sockets[id].socket;
+            const player = this.players[id];
+
+            socket.emit(constants.msg.update, this.createUpdate(player, this.sockets[id]));
+        });
+
+        this.then = this.now;
+    }
+
+    createUpdate(player:Player, socket:Socket):serializedData.WorldSkim {
+        let update = {
+            time: Date.now(),
+            me: player.serialize(),
+            others: Object.values<Player>(this.players).map(p => p.serialize()),
+            entities: Object.values<Entity>(this.entities).map(e => e.serialize())
+        }
+
+        let skim = socket.getSkim(update);
+
+        return skim;
+    }
 }
+
+export default Game;
