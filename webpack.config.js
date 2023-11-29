@@ -82,7 +82,7 @@ module.exports = {
                 ]
             },
             {
-                test: /\.(gif|png|jpe?g|svg)$/i,
+                test: /\.(gif|png|jpe?g|svg|obj|glb|wav|ogg|mp3)$/i,
                 exclude: /node_modules/,
                 type: "asset/resource",
             }
