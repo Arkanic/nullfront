@@ -65,12 +65,12 @@ class Game {
         delete this.sockets[socket.id];
     }
 
+    handleKeyboardInput(socket:io.Socket, state:Data.KeyboardInput):void {
+        if(!this.players[socket.id]) return;
+        this.players[socket.id].translateKeyboardInput(state);
+    }
+
     update():void {
-        this.now = Date.now();
-        let dt = (this.now - this.then) / 1000;
-
-        this.physics.world.step(1 / 60, dt, 3);
-
         Object.keys(this.entities).forEach(id => {
             const entity = this.entities[id];
             entity.update();
@@ -80,6 +80,11 @@ class Game {
             const player = this.players[id];
             player.update();
         });
+
+        this.now = Date.now();
+        let dt = (this.now - this.then) / 1000;
+
+        this.physics.world.step(1 / 60, dt, 3);
 
         Object.keys(this.sockets).forEach(id => {
             const socket = this.sockets[id].socket;

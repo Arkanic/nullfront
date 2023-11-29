@@ -21,6 +21,7 @@ const msg = constants.msg;
 
 io.on("connection", function(socket:socketio.Socket) {
     socket.on(msg.join, joinGame);
+    socket.on(msg.keyboardinput, handleKeyboardInput);
 
     socket.on("disconnect", disconnect);
 
@@ -56,6 +57,19 @@ function joinGame(this:socketio.Socket, data:any):void {
         username:String(data.username).substring(0, 50) || `Player#${Math.floor(Math.random()*10000)}`
     };
     game.addPlayer(this, cleanedData);
+}
+
+function handleKeyboardInput(this:socketio.Socket, data:any):void {
+    data = data.state;
+    if(checkValidation(this, data, "KeyboardInput")) return;
+
+    let cleanedData:Data.KeyboardInput = {
+        w:Boolean(data.w) || false,
+        a:Boolean(data.a) || false,
+        s:Boolean(data.s) || false,
+        d:Boolean(data.d) || false
+    }
+    game.handleKeyboardInput(this, cleanedData);
 }
 
 function disconnect(this:socketio.Socket) {
