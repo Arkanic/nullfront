@@ -12,6 +12,7 @@ class Player extends Entity {
 
     constructor(id:string, username:string, position:Vector3) {
         super(id);
+        this.type = "player";
 
         this.username = username;
         this.body = new cannon.Body({
