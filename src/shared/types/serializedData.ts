@@ -1,4 +1,4 @@
-import {Skim} from "../util/skim";
+import {Skim, SkimDifference} from "../util/skim";
 
 export interface Vector3 {
     x:number;
@@ -36,4 +36,9 @@ export interface WorldSkim {
     me:Player;
     others:Skim<Player>;
     entities:Skim<Entity>;
+}
+
+export interface WorldDifference {
+    others:SkimDifference,
+    entities:SkimDifference
 }

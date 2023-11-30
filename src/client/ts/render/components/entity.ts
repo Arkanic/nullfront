@@ -1,5 +1,5 @@
 import * as three from "three";
-import * as serialized from "../../../shared/types/serializedData";
+import * as serialized from "../../../../shared/types/serializedData";
 
 abstract class Entity {
     protected mesh!:three.Mesh;

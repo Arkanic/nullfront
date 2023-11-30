@@ -1,4 +1,5 @@
 import * as serialized from "../../shared/types/serializedData";
+import {SkimDifference} from "../../shared/util/skim";
 
 const renderdelay:number = 1000/60;
 
@@ -6,12 +7,36 @@ const gameUpdates:Array<serialized.World> = [];
 let gameStart:number = 0;
 let firstServerTimestamp:number = 0;
 
+let worldDifference:serialized.WorldDifference = {
+    entities: {
+        added: [],
+        modified: [],
+        removed: []
+    },
+    others: {
+        added: [],
+        modified: [],
+        removed: []
+    }
+}
+
 export function initState():void {
     gameStart = 0;
     firstServerTimestamp = 0;
 }
 
-export function processGameUpdate(update:serialized.World):void {
+/**
+ * Merge b into a.
+ * @param a Destination. Modified.
+ * @param b Source. Untouched.
+ */
+function mergeSkimDifference(a:SkimDifference, b:SkimDifference) {
+    a.added = a.added.concat(b.added);
+    a.modified = a.modified.concat(b.modified);
+    a.removed = a.removed.concat(b.removed);
+}
+
+export function processGameUpdate(update:serialized.World, difference:serialized.WorldDifference):void {
     if(!firstServerTimestamp) {
         firstServerTimestamp = update.time;
         gameStart = Date.now();
@@ -22,6 +47,31 @@ export function processGameUpdate(update:serialized.World):void {
     if(base > 0) {
         gameUpdates.slice(0, base);
     }
+
+    mergeSkimDifference(worldDifference.entities, difference.entities);
+    mergeSkimDifference(worldDifference.others, difference.others);
+}
+
+/**
+ * Get entity difference. Clears itself.
+ */
+export function getGameDifference():serialized.WorldDifference {
+    let temp = Object.assign({}, worldDifference);
+
+    worldDifference = {
+        entities: {
+            added: [],
+            modified: [],
+            removed: []
+        },
+        others: {
+            added: [],
+            modified: [],
+            removed: []
+        }
+    }
+
+    return temp;
 }
 
 function currentServerTime():number {

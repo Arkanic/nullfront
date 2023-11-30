@@ -9,10 +9,16 @@ function objectify<T extends Entity>(array:Array<T>):{[unit:string]:T} {
     return obj;
 }
 
-export interface Skim<T> {
+export interface Skim<T extends Entity> {
     added:Array<T>,
     modified:Array<T>,
     removed:Array<T>
+}
+
+export interface SkimDifference {
+    added:Array<string>,
+    modified:Array<string>,
+    removed:Array<string>
 }
 
 export function skimArray<T extends Entity>(now:Array<T>, then:Array<T>):Skim<T> {
@@ -55,4 +61,12 @@ export function fattenSkim<T extends Entity>(skim:Skim<T>, then:Array<T>):Array<
     }
 
     return copied;
+}
+
+export function skimDifference<T extends Entity>(skim:Skim<T>):SkimDifference {
+    return {
+        added: skim.added.map(a => a.id),
+        modified: skim.modified.map(m => m.id),
+        removed: skim.removed.map(r => r.id)
+    }
 }

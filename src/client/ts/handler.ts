@@ -19,10 +19,18 @@ function fattenWorldSkim(update:serialized.WorldSkim, then:{[unit:string]:any}):
     return copied as unknown as any as serialized.World;
 }
 
+function getWorldDifference(update:serialized.WorldSkim):serialized.WorldDifference {
+    return {
+        others: skimmer.skimDifference(update.others),
+        entities: skimmer.skimDifference(update.entities)
+    }
+}
+
 export function handleGameUpdate(update:serialized.WorldSkim):void {
     let fullWorld = fattenWorldSkim(update, world);
+    let worldDifference = getWorldDifference(update);
 
-    if(fullWorld.me) processGameUpdate(fullWorld);
+    if(fullWorld.me) processGameUpdate(fullWorld, worldDifference);
 
     world = fullWorld;
 }
