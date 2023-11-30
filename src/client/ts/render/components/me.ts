@@ -4,19 +4,21 @@ import Entity from "./entity";
 
 class Me extends Entity {
     camera:three.Camera;
+    audioListener:three.AudioListener
 
-    constructor(scene:three.Scene) {
-        super();
+    constructor(scene:three.Scene, camera:three.Camera, audio:three.AudioListener) {
+        super(scene);
 
-        this.camera = new three.PerspectiveCamera(
-            75,
-            window.innerWidth / window.innerHeight,
-            0.1,
-            1000
-        );
+        this.camera = camera;
+        this.audioListener = audio;
 
-        const listener = new three.AudioListener();
-        this.camera.add(listener);
+        this.mesh = new three.Mesh(new three.SphereGeometry(0.1));
+    }
+
+    update(data:serialized.Player) {
+        super.update(data);
+        this.camera.position.set(data.position.x, data.position.y, data.position.z);
+        this.camera.setRotationFromQuaternion(new three.Quaternion(data.rotation.x, data.rotation.y, data.rotation.z, data.rotation.w));
     }
 }
 
