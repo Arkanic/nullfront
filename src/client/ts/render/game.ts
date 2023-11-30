@@ -12,7 +12,7 @@ import {SkimDifference} from "../../../shared/util/skim";
 
 class Game {
     scene:three.Scene;
-    camera:three.Camera;
+    camera:three.PerspectiveCamera;
     audioListener:three.AudioListener;
     me:Me;
     others:{[unit:string]:Player};

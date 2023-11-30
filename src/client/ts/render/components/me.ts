@@ -3,10 +3,10 @@ import * as serialized from "../../../../shared/types/serializedData";
 import Entity from "./entity";
 
 class Me extends Entity {
-    camera:three.Camera;
+    camera:three.PerspectiveCamera;
     audioListener:three.AudioListener
 
-    constructor(scene:three.Scene, camera:three.Camera, audio:three.AudioListener) {
+    constructor(scene:three.Scene, camera:three.PerspectiveCamera, audio:three.AudioListener) {
         super(scene);
 
         this.camera = camera;

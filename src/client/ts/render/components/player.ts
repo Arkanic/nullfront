@@ -5,7 +5,7 @@ class Player extends Entity {
     constructor(scene:three.Scene) {
         super(scene);
 
-        const material = new three.MeshStandardMaterial();
+        const material = new three.MeshBasicMaterial();
         material.color = new three.Color(0x042d65);
         this.mesh = new three.Mesh(new three.SphereGeometry(1), material);
         scene.add(this.mesh);
