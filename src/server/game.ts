@@ -70,6 +70,11 @@ class Game {
         this.players[socket.id].translateKeyboardInput(state);
     }
 
+    handleMouseInput(socket:io.Socket, state:Data.MouseInput):void {
+        if(!this.players[socket.id]) return;
+        this.players[socket.id].translateMouseInput(state);
+    }
+
     update():void {
         Object.keys(this.entities).forEach(id => {
             const entity = this.entities[id];

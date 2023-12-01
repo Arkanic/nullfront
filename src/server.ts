@@ -22,6 +22,7 @@ const msg = constants.msg;
 io.on("connection", function(socket:socketio.Socket) {
     socket.on(msg.join, joinGame);
     socket.on(msg.keyboardinput, handleKeyboardInput);
+    socket.on(msg.mouseinput, handleMouseInput);
 
     socket.on("disconnect", disconnect);
 
@@ -70,6 +71,20 @@ function handleKeyboardInput(this:socketio.Socket, data:any):void {
         d:Boolean(data.d) || false
     }
     game.handleKeyboardInput(this, cleanedData);
+}
+
+function handleMouseInput(this:socketio.Socket, data:any):void {
+    data = data.state;
+    if(checkValidation(this, data, "MouseInput")) return;
+    let cleanedData:Data.MouseInput = {
+        rotation: {
+            w: Number(data.rotation.w),
+            x: Number(data.rotation.x),
+            y: Number(data.rotation.y),
+            z: Number(data.rotation.z)
+        }
+    }
+    game.handleMouseInput(this, cleanedData);
 }
 
 function disconnect(this:socketio.Socket) {

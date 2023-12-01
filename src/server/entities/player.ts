@@ -45,7 +45,7 @@ class Player extends Entity {
     }
 
     translateMouseInput(mouse:Data.MouseInput):void {
-        
+        this.body.quaternion.set(mouse.rotation.x, mouse.rotation.y, mouse.rotation.z, mouse.rotation.w);
     }
 
     serialize():Serialized.Player {
