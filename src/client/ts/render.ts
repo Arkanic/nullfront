@@ -26,10 +26,16 @@ export function pointerLockControls() {
     return game.controls;
 }
 
+function onClick() {
+    if(!game.isLocked()) game.lockScreen();
+}
+
+
 let rendering = false;
 export function startRendering() {
     rendering = true;
     game.lockScreen();
+    document.body.addEventListener("click", onClick);
     animate();
 }
 
@@ -43,5 +49,6 @@ function animate() {
 
 export function stopRendering() {
     game.unlockScreen();
+    document.body.removeEventListener("click", onClick);
     rendering = false;
 }

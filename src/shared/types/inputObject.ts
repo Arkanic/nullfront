@@ -1,5 +1,3 @@
-import {Quaternion} from "./serializedData";
-
 export interface Join {
     username:string;
 }
@@ -12,5 +10,10 @@ export interface KeyboardInput {
 }
 
 export interface MouseInput {
-    rotation:Quaternion
+    rotation: {
+        x:number;
+        y:number;
+        z:number;
+        w:number;
+    }
 }

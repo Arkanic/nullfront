@@ -52,7 +52,7 @@ class Game {
     addPlayer(socket:io.Socket, data:Data.Join):void {
         this.sockets[socket.id] = new Socket(socket);
 
-        const position = new Vector3((Math.random() * 200) - 100, 60, (Math.random() * 200) - 100);
+        const position = new Vector3((Math.random() * 10) - 5, 10, (Math.random() * 10) - 5);
         this.players[socket.id] = new Player(socket.id, striptags(data.username), position);
 
         this.physics.world.addBody(this.players[socket.id].body);

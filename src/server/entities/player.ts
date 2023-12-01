@@ -3,7 +3,7 @@ import constants from "../../shared/constants";
 import Entity from "./entity";
 import * as Data from "../../shared/types/inputObject";
 import * as Serialized from "../../shared/types/serializedData";
-import {Vector3, Vector2} from "three";
+import {Vector3} from "three";
 import * as cannon from "cannon-es";
 
 class Player extends Entity {
@@ -16,9 +16,11 @@ class Player extends Entity {
 
         this.username = username;
         this.body = new cannon.Body({
-            mass: 1
+            mass: 1,
+            linearDamping: 0.95
         });
         this.body.addShape(new cannon.Sphere(1));
+        this.body.position.set(position.x, position.y, position.z);
 
         this.keys = {
             w: false,
@@ -32,12 +34,17 @@ class Player extends Entity {
         super.update();
 
         let delta = new cannon.Vec3(0, 0, 0);
-        if(this.keys.a) delta.x -= constants.player.speed;
-        if(this.keys.d) delta.x += constants.player.speed;
-        if(this.keys.w) delta.z += constants.player.speed;
-        if(this.keys.s) delta.z -= constants.player.speed;
+        if(this.keys.a) delta.x -= constants.player.acceleration;
+        if(this.keys.d) delta.x += constants.player.acceleration;
+        if(this.keys.w) delta.z -= constants.player.acceleration;
+        if(this.keys.s) delta.z += constants.player.acceleration;
         let direction = this.body.quaternion.vmult(delta);
-        this.body.velocity.set(direction.x, direction.y, direction.z);
+        this.body.velocity.x += direction.x;
+        this.body.velocity.z += direction.z;
+        
+        this.body.velocity.x = Math.min(constants.player.maxspeed, Math.max(-constants.player.maxspeed, this.body.velocity.x))
+        this.body.velocity.z = Math.min(constants.player.maxspeed, Math.max(-constants.player.maxspeed, this.body.velocity.z))
+
     }
 
     translateKeyboardInput(keys:Data.KeyboardInput):void {

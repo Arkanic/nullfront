@@ -1,6 +1,7 @@
 const constants = {
     player: {
-        speed: 1.0
+        acceleration: 0.5,
+        maxspeed: 2.5
     },
     map: {
         maxsize: {
