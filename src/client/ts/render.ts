@@ -22,6 +22,10 @@ export function updateGame() {
     game.update();
 }
 
+export function pointerLockControls() {
+    return game.controls;
+}
+
 let rendering = false;
 export function startRendering() {
     rendering = true;

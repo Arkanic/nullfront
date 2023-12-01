@@ -12,7 +12,8 @@ const constants = {
         join: "joingame",
         serverclosing: "endgame",
         update: "update",
-        keyboardinput: "keyboardupdate"
+        keyboardinput: "keyboardupdate",
+        mouseinput: "mouseupdate"
     }
 }
 

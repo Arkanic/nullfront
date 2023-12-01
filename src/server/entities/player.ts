@@ -31,18 +31,21 @@ class Player extends Entity {
     update() {
         super.update();
 
-        let delta = new Vector2(0, 0);
+        let delta = new cannon.Vec3(0, 0, 0);
         if(this.keys.a) delta.x -= constants.player.speed;
         if(this.keys.d) delta.x += constants.player.speed;
-        if(this.keys.w) delta.y += constants.player.speed;
-        if(this.keys.s) delta.y -= constants.player.speed; 
-
-        // will do proper trig stuff later
-        this.body.velocity.set(delta.x, 0, delta.y);
+        if(this.keys.w) delta.z += constants.player.speed;
+        if(this.keys.s) delta.z -= constants.player.speed;
+        let direction = this.body.quaternion.vmult(delta);
+        this.body.velocity.set(direction.x, direction.y, direction.z);
     }
 
     translateKeyboardInput(keys:Data.KeyboardInput):void {
         this.keys = keys;
+    }
+
+    translateMouseInput(mouse:Data.MouseInput):void {
+        
     }
 
     serialize():Serialized.Player {

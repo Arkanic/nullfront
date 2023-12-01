@@ -50,3 +50,11 @@ export const updateKeyboardInput = (state:Data.KeyboardInput) => {
         previousKeyboardState = JSON.stringify(state);
     }
 }
+
+let previousMouseState = "";
+export const updateMouseInput = (state:Data.MouseInput) => {
+    if(previousMouseState != JSON.stringify(state)) {
+        socket.emit(constants.msg.mouseinput, {state});
+        previousMouseState = JSON.stringify(state);
+    }
+}
