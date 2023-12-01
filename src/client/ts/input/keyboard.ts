@@ -49,8 +49,6 @@ export function getKeyboardState():{[unit:string]:boolean} {
 }
 
 
-let interval:NodeJS.Timeout;
-
 /**
  * Start handling keyboard input
  */
@@ -61,10 +59,6 @@ export function startKeyboardInputHandling():void {
 
     window.addEventListener("keydown", handleKeyDown);
     window.addEventListener("keyup", handleKeyUp);
-
-    interval = setInterval(() => {
-        networking.updateKeyboardInput(keys as unknown as Data.KeyboardInput);
-    });
 }
 
 /**
@@ -73,6 +67,4 @@ export function startKeyboardInputHandling():void {
 export function stopKeyboardInputHandling():void {
     window.removeEventListener("keydown", handleKeyDown);
     window.removeEventListener("keyup", handleKeyUp);
-
-    clearInterval(interval);
 }
