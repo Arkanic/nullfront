@@ -18,9 +18,14 @@ function onWindowResize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
+export function updateGame() {
+    game.update();
+}
+
 let rendering = false;
 export function startRendering() {
     rendering = true;
+    game.lockScreen();
     animate();
 }
 
@@ -33,5 +38,6 @@ function animate() {
 }
 
 export function stopRendering() {
+    game.unlockScreen();
     rendering = false;
 }

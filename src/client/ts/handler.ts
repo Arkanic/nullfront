@@ -1,6 +1,7 @@
 import {processGameUpdate, getCurrentState} from "./state";
 import * as serialized from "../../shared/types/serializedData";
 import * as skimmer from "../../shared/util/skim";
+import {updateGame} from "./render";
 
 let world:{[unit:string]:any} = {
     time: 0,
@@ -33,4 +34,6 @@ export function handleGameUpdate(update:serialized.WorldSkim):void {
     if(fullWorld.me) processGameUpdate(fullWorld, worldDifference);
 
     world = fullWorld;
+
+    updateGame();
 }

@@ -18,7 +18,7 @@ class Me extends Entity {
     update(data:serialized.Player) {
         super.update(data);
         this.camera.position.set(data.position.x, data.position.y, data.position.z);
-        this.camera.setRotationFromQuaternion(new three.Quaternion(data.rotation.x, data.rotation.y, data.rotation.z, data.rotation.w));
+        //this.camera.setRotationFromQuaternion(new three.Quaternion(data.rotation.x, data.rotation.y, data.rotation.z, data.rotation.w));
     }
 }
 

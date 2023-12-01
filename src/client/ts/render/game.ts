@@ -1,6 +1,7 @@
 import {nanoid} from "nanoid";
 import _ from "lodash";
 import * as three from "three";
+import {PointerLockControls} from "three/examples/jsm/controls/PointerLockControls";
 import * as state from "../state";
 import * as serialized from "../../../shared/types/serializedData";
 import constants from "../../../shared/constants";
@@ -13,6 +14,7 @@ import {SkimDifference} from "../../../shared/util/skim";
 class Game {
     scene:three.Scene;
     camera:three.PerspectiveCamera;
+    controls:PointerLockControls;
     audioListener:three.AudioListener;
     me:Me;
     others:{[unit:string]:Player};
@@ -30,9 +32,31 @@ class Game {
         this.audioListener = new three.AudioListener();
         this.camera.add(this.audioListener);
 
+        this.controls = new PointerLockControls(this.camera, document.body);
+        scene.add(this.controls.getObject());
+
         this.me = new Me(scene, this.camera, this.audioListener);
         this.others = {};
         this.entities = {};
+
+        let floorGeometry = new three.BoxGeometry(constants.map.maxsize.x, 1, constants.map.maxsize.y);
+        let floorMaterial = new three.MeshBasicMaterial();
+        floorMaterial.color = new three.Color(0x00ff00);
+        let floorMesh = new three.Mesh(floorGeometry, floorMaterial);
+        floorMesh.position.set(0, 0, 0);
+        scene.add(floorMesh);
+    }
+
+    lockScreen() {
+        this.controls.lock();
+    }
+
+    unlockScreen() {
+        this.controls.unlock();
+    }
+
+    isLocked() {
+        return this.controls.isLocked;
     }
 
     update() {

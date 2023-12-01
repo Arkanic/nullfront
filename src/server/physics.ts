@@ -39,7 +39,8 @@ export default class Physics {
             }
         });*/
 
-        this.groundMesh = new three.Mesh(new three.PlaneGeometry(constants.map.maxsize.x, constants.map.maxsize.y));
+        this.groundMesh = new three.Mesh(new three.BoxGeometry(constants.map.maxsize.x, 1, constants.map.maxsize.y));
+        this.groundMesh.position.set(0, 0, 0);
 
         const shape = CannonUtils.CreateTrimesh(this.groundMesh.geometry);
         this.groundBody = new cannon.Body({
