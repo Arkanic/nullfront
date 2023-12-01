@@ -39,6 +39,8 @@ export default class Physics {
             }
         });*/
 
+        this.world.gravity.set(0, -9.81, 0);
+
         this.groundMesh = new three.Mesh(new three.BoxGeometry(constants.map.maxsize.x, 1, constants.map.maxsize.y));
         this.groundMesh.position.set(0, 0, 0);
 

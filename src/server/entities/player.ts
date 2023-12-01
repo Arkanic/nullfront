@@ -9,6 +9,7 @@ import * as cannon from "cannon-es";
 class Player extends Entity {
     username:string;
     keys:Data.KeyboardInput;
+    canJump:boolean;
 
     constructor(id:string, username:string, position:Vector3) {
         super(id);
@@ -26,13 +27,33 @@ class Player extends Entity {
             w: false,
             a: false,
             s: false,
-            d: false
+            d: false,
+            space: false
         }
+
+        this.canJump = false;
+
+        const contactNormal = new cannon.Vec3();
+        const upAxis = new cannon.Vec3(0, 1, 0);
+        this.body.addEventListener("collide", (e:any) => {
+            const {contact} = e;
+
+            if(contact.bi.id === this.body.id) { // bi is the player
+                contact.ni.negate(contactNormal);
+            } else {
+                contactNormal.copy(contact.ni);
+            }
+
+            if(contactNormal.dot(upAxis) > 0.5) {
+                this.canJump = true;
+            }
+        });
     }
 
     update() {
         super.update();
 
+        // wasd movement
         let delta = new cannon.Vec3(0, 0, 0);
         if(this.keys.a) delta.x -= constants.player.acceleration;
         if(this.keys.d) delta.x += constants.player.acceleration;
@@ -45,6 +66,11 @@ class Player extends Entity {
         this.body.velocity.x = Math.min(constants.player.maxspeed, Math.max(-constants.player.maxspeed, this.body.velocity.x))
         this.body.velocity.z = Math.min(constants.player.maxspeed, Math.max(-constants.player.maxspeed, this.body.velocity.z))
 
+        // jump
+        if(this.keys.space && this.canJump) {
+            this.body.velocity.y += constants.player.jumpspeed;
+            this.canJump = false;
+        }
     }
 
     translateKeyboardInput(keys:Data.KeyboardInput):void {

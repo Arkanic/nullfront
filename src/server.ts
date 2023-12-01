@@ -68,7 +68,8 @@ function handleKeyboardInput(this:socketio.Socket, data:any):void {
         w:Boolean(data.w) || false,
         a:Boolean(data.a) || false,
         s:Boolean(data.s) || false,
-        d:Boolean(data.d) || false
+        d:Boolean(data.d) || false,
+        space:Boolean(data.space) || false
     }
     game.handleKeyboardInput(this, cleanedData);
 }

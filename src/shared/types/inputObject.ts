@@ -7,6 +7,7 @@ export interface KeyboardInput {
     a:boolean;
     s:boolean;
     d:boolean;
+    space:boolean;
 }
 
 export interface MouseInput {

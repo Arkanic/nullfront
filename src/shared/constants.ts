@@ -1,7 +1,8 @@
 const constants = {
     player: {
         acceleration: 0.5,
-        maxspeed: 2.5
+        maxspeed: 2.5,
+        jumpspeed: 10
     },
     map: {
         maxsize: {
