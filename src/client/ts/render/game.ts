@@ -1,4 +1,3 @@
-import {nanoid} from "nanoid";
 import _ from "lodash";
 import * as three from "three";
 import {PointerLockControls} from "three/examples/jsm/controls/PointerLockControls";
@@ -9,9 +8,11 @@ import constants from "../../../shared/constants";
 import Player from "./components/player";
 import Me from "./components/me";
 import Entity from "./components/entity";
+import Beachball from "./components/beachball";
 import {SkimDifference} from "../../../shared/util/skim";
 
 import {floorMaterial} from "./materials";
+
 
 class Game {
     scene:three.Scene;
@@ -80,7 +81,35 @@ class Game {
     }
 
     updateEntities(world:serialized.World, difference:SkimDifference) {
-        // todo
+        for(let i in difference.added) {
+            let id = difference.added[i];
+            this.addEntity(id, _.find(world.entities, {id}));
+        }
+
+        for(let i in difference.modified) {
+            let id = difference.modified[i];
+            let data = _.find(world.entities, {id});
+            if(data) this.entities[id].update(data);
+        }
+
+        for(let i in difference.removed) {
+            let id = difference.removed[i];
+            this.entities[id].dispose();
+            delete this.entities[id];
+        }
+    }
+
+    addEntity(id:string, data:serialized.Entity | undefined) {
+        if(!data) return;
+        let entity:Entity;
+        if(data.type == "beachball") {
+            entity = new Beachball(this.scene);
+        } else {
+            entity = new Beachball(this.scene); // replace with error model soon
+        }
+
+        this.entities[id] = entity;
+        this.entities[id].update(data);
     }
 
     updateOthers(world:serialized.World, difference:SkimDifference) {
@@ -100,6 +129,7 @@ class Game {
         for(let i in difference.removed) {
             let id = difference.removed[i];
             this.others[id].dispose();
+            delete this.others[id];
         }
     }
 }

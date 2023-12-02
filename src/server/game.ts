@@ -1,18 +1,19 @@
 import io from "socket.io";
 import striptags from "striptags";
 import * as cannon from "cannon-es";
-import {nanoid} from "nanoid";
+import {v4 as uuid} from "uuid";
 
 import Socket from "./socket";
 
 import Entity from "./entities/entity";
 import Player from "./entities/player";
+import Beachball from "./entities/beachball";
 import Physics from "./physics";
 
 import * as Data from "../shared/types/inputObject";
 import * as serializedData from "../shared/types/serializedData";
 import constants from "../shared/constants";
-import { Vector3 } from "three";
+import {Vector3} from "three";
 
 class Game {
     sockets:{[key:string]:Socket};
@@ -35,6 +36,12 @@ class Game {
         this.now = 0;
 
         setInterval(this.update.bind(this), 1000 / 60);
+
+        for(let i = 0; i < 10; i++) {
+            let beachball = new Beachball(uuid());
+            beachball.setPosition((Math.random() * 20) - 10, (Math.random() * 20) - 10, (Math.random() * 20) - 10); 
+            this.addEntity(beachball);
+        }
 
         console.log("Game initialised");
     }

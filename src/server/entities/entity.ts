@@ -14,6 +14,18 @@ abstract class Entity {
         this.type = "entity";
     }
 
+    setPosition(x:cannon.Vec3):void;
+    setPosition(x:number, y:number, z:number):void;
+    setPosition(x:number | cannon.Vec3, y?:number, z?:number) {
+        if(x instanceof cannon.Vec3) {
+            this.body.position.set(x.x, x.y, x.z);
+        } else {
+            this.body.position.x = x;
+            this.body.position.y = y as number;
+            this.body.position.z = z as number;
+        }
+    }
+
     update():void {
     }
 

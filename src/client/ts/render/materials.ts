@@ -1,10 +1,12 @@
 import * as three from "three";
+import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import {getAssetUrl} from "../assets";
 import constants from "../../../shared/constants";
 
-const loader = new three.TextureLoader();
+const textureLoader = new three.TextureLoader();
+const gltfLoader = new GLTFLoader();
 
-const load = (name:string) => loader.load(getAssetUrl(name));
+const load = (name:string) => textureLoader.load(getAssetUrl(name));
 
 // the player
 export const playerMaterial = new three.MeshBasicMaterial();
@@ -18,3 +20,30 @@ floorTexture.wrapT = three.RepeatWrapping;
 floorTexture.repeat.set(constants.map.maxsize.x / 64, constants.map.maxsize.y / 64);
 export const floorMaterial = new three.MeshPhongMaterial();
 floorMaterial.map = floorTexture;
+
+// beachball
+export let beachballGroup!:three.Group;
+
+// barrel
+export let barrelGroup!:three.Group;
+
+
+export function materialPromise():Promise<void[]> {
+    return Promise.all<void>([
+        new Promise((resolve) => {
+            gltfLoader.load(getAssetUrl("./beachball.glb"), async data => {
+                const model = data.scene;
+                //await renderer.compileAsync(model, camera, scene);
+                beachballGroup = model;
+                resolve();
+            });
+        }),
+        new Promise((resolve => {
+            gltfLoader.load(getAssetUrl("./barrel.glb"), async data => {
+                const model = data.scene;
+                barrelGroup = model;
+                resolve();
+            });
+        }))
+    ]);
+}

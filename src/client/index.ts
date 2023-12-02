@@ -6,6 +6,7 @@ import * as render from "./ts/render";
 import * as input from "./ts/input";
 import * as assets from "./ts/assets";
 import constants from "../shared/constants";
+import * as materials from "./ts/render/materials";
 
 console.log("nullfront");
 
@@ -14,7 +15,8 @@ const playButton = document.getElementById("play-button")!;
 const usernameInput = document.getElementById("username-input")! as HTMLInputElement;
 
 Promise.all([
-    networking.connect()
+    networking.connect(),
+    materials.materialPromise()
 ]).then(() => {
     playMenu.classList.remove("hidden");
     usernameInput.focus();
