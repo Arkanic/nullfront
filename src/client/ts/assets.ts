@@ -1,29 +1,30 @@
-let assetNames:Array<AssetData> = handleRequireContext(require.context("../assets/", false, /\.(gif|png|jpe?g|svg|obj|glb|wav|ogg|mp3)$/i));
-let assets:{[unit:string]:any} = {};
+let assetNames:{[unit:string]:string} = handleRequireContext(require.context("../assets/", false, /\.(gif|png|jpe?g|svg|obj|glb|wav|ogg|mp3)$/i));
+//let assets:{[unit:string]:any} = {};
 
-const downloadPromise:Promise<Array<void>> = Promise.all(assetNames.map(downloadAsset));
+//const downloadPromise:Promise<Array<void>> = Promise.all(assetNames.map(downloadAsset));
 
-interface AssetData {
+/*interface AssetData {
     name:string;
     url:string;
+}*/
+
+export function getAssetUrl(name:string):string {
+    return assetNames[name];
 }
 
-function handleRequireContext(r:__WebpackModuleApi.RequireContext):Array<AssetData> {
+function handleRequireContext(r:__WebpackModuleApi.RequireContext):{[unit:string]:string} {
     let names:Array<string> = r.keys();
     let urls:Array<string> = r.keys().map(r) as Array<string>;
 
-    let assetData:Array<AssetData> = [];
+    let assetData:{[unit:string]:string} = {};
     for(let i in names) {
-        assetData.push({
-            name: names[i],
-            url: urls[i]
-        });
+        assetData[names[i]] = urls[i];
     }
 
     return assetData;
 }
 
-function downloadAsset(meta:AssetData):Promise<void> {
+/*function downloadAsset(meta:AssetData):Promise<void> {
     return new Promise((resolve, reject) => {
         let xhr = new XMLHttpRequest();
         xhr.open("GET", meta.url, true);
@@ -40,7 +41,7 @@ function downloadAsset(meta:AssetData):Promise<void> {
         });
         xhr.send();
     });
-}
+}*/
 
-export const downloadAssets = () => downloadPromise;
-export const get = (assetName:string) => assets[assetName];
+//export const downloadAssets = () => downloadPromise;
+//export const get = (assetName:string) => assets[assetName];

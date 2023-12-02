@@ -9,6 +9,8 @@ import constants from "../shared/constants";
 import {OBJLoader} from "./util/OBJLoader";
 import CannonUtils from "./util/cannonUtils";
 
+import {playerMaterial, groundMaterial} from "./physics/materials";
+
 export default class Physics {
     world = new cannon.World();
 
@@ -41,12 +43,19 @@ export default class Physics {
 
         this.world.gravity.set(0, -9.81, 0);
 
+        
+        this.world.addContactMaterial(new cannon.ContactMaterial(playerMaterial, groundMaterial, {
+            friction: 0.0,
+            restitution: 0.3
+        }));
+
         this.groundMesh = new three.Mesh(new three.BoxGeometry(constants.map.maxsize.x, 1, constants.map.maxsize.y));
         this.groundMesh.position.set(0, 0, 0);
 
         const shape = CannonUtils.CreateTrimesh(this.groundMesh.geometry);
         this.groundBody = new cannon.Body({
-            mass: 0
+            mass: 0,
+            material: groundMaterial
         });
         this.groundBody.addShape(shape);
         this.groundBody.position.x = this.groundMesh.position.x;

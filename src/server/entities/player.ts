@@ -5,6 +5,7 @@ import * as Data from "../../shared/types/inputObject";
 import * as Serialized from "../../shared/types/serializedData";
 import {Vector3} from "three";
 import * as cannon from "cannon-es";
+import {playerMaterial} from "../physics/materials";
 
 class Player extends Entity {
     username:string;
@@ -17,8 +18,9 @@ class Player extends Entity {
 
         this.username = username;
         this.body = new cannon.Body({
-            mass: 1,
-            linearDamping: 0.95
+            mass: 70,
+            linearDamping: 0.99,
+            material: playerMaterial
         });
         this.body.addShape(new cannon.Sphere(1));
         this.body.position.set(position.x, position.y, position.z);

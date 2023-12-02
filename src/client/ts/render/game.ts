@@ -11,6 +11,8 @@ import Me from "./components/me";
 import Entity from "./components/entity";
 import {SkimDifference} from "../../../shared/util/skim";
 
+import {floorMaterial} from "./materials";
+
 class Game {
     scene:three.Scene;
     camera:three.PerspectiveCamera;
@@ -39,9 +41,17 @@ class Game {
         this.others = {};
         this.entities = {};
 
+        // sky
+        scene.background = new three.Color(0x1787b5);
+        scene.fog = new three.Fog(0x1787b5, 0, 500);
+
+        // ambient light
+        let light = new three.AmbientLight(0x404040);
+        light.intensity = 10;
+        scene.add(light);
+
+        // floor (remove later, replace with entity)
         let floorGeometry = new three.BoxGeometry(constants.map.maxsize.x, 1, constants.map.maxsize.y);
-        let floorMaterial = new three.MeshBasicMaterial();
-        floorMaterial.color = new three.Color(0x00ff00);
         let floorMesh = new three.Mesh(floorGeometry, floorMaterial);
         floorMesh.position.set(0, 0, 0);
         scene.add(floorMesh);
