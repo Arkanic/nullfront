@@ -7,8 +7,7 @@ import Socket from "./socket";
 
 import Entity from "./entities/entity";
 import Player from "./entities/player";
-import Beachball from "./entities/beachball";
-import Barrel from "./entities/barrel";
+import * as entities from "./entities";
 import Physics from "./physics";
 
 import * as Data from "../shared/types/inputObject";
@@ -41,13 +40,13 @@ class Game {
         setInterval(this.update.bind(this), 1000 / 60);
 
         for(let i = 0; i < 10; i++) {
-            let beachball = new Beachball(uuid());
+            let beachball = entities.newBeachball(uuid());
             beachball.setPosition((Math.random() * 20) - 10, 2, (Math.random() * 20) - 10); 
             this.addEntity(beachball);
         }
 
         for(let i = 0; i < 5; i++) {
-            let barrel = new Barrel(uuid());
+            let barrel = entities.newBarrel(uuid());
             barrel.setPosition((Math.random() * 20) - 10, 1, (Math.random() * 20) - 10);
             this.addEntity(barrel);
         }
