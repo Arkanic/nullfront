@@ -14,6 +14,7 @@ import * as Data from "../shared/types/inputObject";
 import * as serializedData from "../shared/types/serializedData";
 import constants from "../shared/constants";
 import {Vector3} from "three";
+import _ from "lodash";
 
 class Game {
     sockets:{[key:string]:Socket};
@@ -146,10 +147,14 @@ class Game {
     }
 
     createUpdate(player:Player, socket:Socket):serializedData.WorldSkim {
+        let others = Object.values<Player>(this.players).map(p => p.serialize());
+        _.remove(others, {
+            id: player.id
+        });
         let update = {
             time: Date.now(),
             me: player.serialize(),
-            others: Object.values<Player>(this.players).map(p => p.serialize()),
+            others,
             entities: Object.values<Entity>(this.entities).map(e => e.serialize())
         }
 

@@ -2,6 +2,8 @@ import * as three from "three";
 import * as serialized from "../../../../shared/types/serializedData";
 import Entity from "./entity";
 
+const cameraOffsetY = 0.75;
+
 class Me extends Entity {
     camera:three.PerspectiveCamera;
     audioListener:three.AudioListener
@@ -17,7 +19,7 @@ class Me extends Entity {
 
     update(data:serialized.Player) {
         super.update(data);
-        this.camera.position.set(data.position.x, data.position.y, data.position.z);
+        this.camera.position.set(data.position.x, data.position.y + cameraOffsetY, data.position.z);
         //this.camera.setRotationFromQuaternion(new three.Quaternion(data.rotation.x, data.rotation.y, data.rotation.z, data.rotation.w));
     }
 }
