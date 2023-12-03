@@ -39,6 +39,8 @@ class Game {
 
         setInterval(this.update.bind(this), 1000 / 60);
 
+        this.addEntity(entities.newGround(uuid()));
+
         for(let i = 0; i < 10; i++) {
             let beachball = entities.newBeachball(uuid());
             beachball.setPosition((Math.random() * 20) - 10, 2, (Math.random() * 20) - 10); 

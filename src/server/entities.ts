@@ -17,3 +17,12 @@ export function newBarrel(id:string):PassiveEntity {
         type: cannon.BODY_TYPES.STATIC
     }));
 }
+
+export function newGround(id:string):PassiveEntity {
+    let body = new cannon.Body({
+        shape: new cannon.Plane(),
+        type: cannon.BODY_TYPES.STATIC
+    });
+    body.quaternion.setFromEuler(-Math.PI / 2, 0, 0);
+    return new PassiveEntity(id, "ground", body);
+}

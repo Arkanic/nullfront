@@ -14,9 +14,6 @@ import {playerMaterial, groundMaterial} from "./physics/materials";
 export default class Physics {
     world = new cannon.World();
 
-    groundMesh:three.Mesh;
-    groundBody:cannon.Body;
-
     constructor() {
         /*const loader = new OBJLoader();
         const data = fs.readFileSync("src/client/assets/models/groundmap.obj");
@@ -48,22 +45,5 @@ export default class Physics {
             friction: 0.0,
             restitution: 0.3
         }));
-
-        this.groundMesh = new three.Mesh(new three.BoxGeometry(constants.map.maxsize.x, 1, constants.map.maxsize.y));
-        this.groundMesh.position.set(0, 0, 0);
-
-        const shape = CannonUtils.CreateTrimesh(this.groundMesh.geometry);
-        this.groundBody = new cannon.Body({
-            mass: 0,
-            material: groundMaterial
-        });
-        this.groundBody.addShape(shape);
-        this.groundBody.position.x = this.groundMesh.position.x;
-        this.groundBody.position.y = this.groundMesh.position.y;
-        this.groundBody.position.z = this.groundMesh.position.z;
-        this.groundBody.quaternion.x = this.groundMesh.quaternion.x;
-        this.groundBody.quaternion.y = this.groundMesh.quaternion.y;
-        this.groundBody.quaternion.z = this.groundMesh.quaternion.z;
-        this.world.addBody(this.groundBody);
     }
 }

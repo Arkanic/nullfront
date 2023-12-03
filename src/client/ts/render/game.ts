@@ -10,9 +10,8 @@ import Me from "./components/me";
 import Entity from "./components/entity";
 import Beachball from "./components/beachball";
 import Barrel from "./components/barrel";
+import Ground from "./components/ground";
 import {SkimDifference} from "../../../shared/util/skim";
-
-import {floorMaterial} from "./materials";
 
 
 class Game {
@@ -51,12 +50,6 @@ class Game {
         let light = new three.AmbientLight(0x404040);
         light.intensity = 10;
         scene.add(light);
-
-        // floor (remove later, replace with entity)
-        let floorGeometry = new three.BoxGeometry(constants.map.maxsize.x, 1, constants.map.maxsize.y);
-        let floorMesh = new three.Mesh(floorGeometry, floorMaterial);
-        floorMesh.position.set(0, 0, 0);
-        scene.add(floorMesh);
     }
 
     lockScreen() {
@@ -103,12 +96,19 @@ class Game {
     addEntity(id:string, data:serialized.Entity | undefined) {
         if(!data) return;
         let entity:Entity;
-        if(data.type == "beachball") {
-            entity = new Beachball(this.scene);
-        } else if(data.type == "barrel") {
-            entity = new Barrel(this.scene);
-        } else {
-            entity = new Beachball(this.scene); // replace with error model soon
+        switch(data.type) {
+            case "beachball":
+                entity = new Beachball(this.scene);
+                break;
+            case "barrel":
+                entity = new Barrel(this.scene);
+                break;
+            case "ground":
+                entity = new Ground(this.scene);
+                break;
+            default:
+                entity = new Beachball(this.scene);
+                break;
         }
 
         this.entities[id] = entity;
