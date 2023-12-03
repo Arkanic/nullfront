@@ -11,6 +11,7 @@ class Player extends Entity {
     username:string;
     keys:Data.KeyboardInput;
     canJump:boolean;
+    lookingAt:cannon.Quaternion;
 
     constructor(id:string, username:string, position:Vector3) {
         super(id);
@@ -34,6 +35,7 @@ class Player extends Entity {
         }
 
         this.canJump = false;
+        this.lookingAt = new cannon.Quaternion();
 
         const contactNormal = new cannon.Vec3();
         const upAxis = new cannon.Vec3(0, 1, 0);
@@ -61,7 +63,7 @@ class Player extends Entity {
         if(this.keys.d) delta.x += constants.player.acceleration;
         if(this.keys.w) delta.z -= constants.player.acceleration;
         if(this.keys.s) delta.z += constants.player.acceleration;
-        let direction = this.body.quaternion.vmult(delta);
+        let direction = this.lookingAt.vmult(delta);
         this.body.velocity.x += direction.x;
         this.body.velocity.z += direction.z;
         
@@ -80,7 +82,7 @@ class Player extends Entity {
     }
 
     translateMouseInput(mouse:Data.MouseInput):void {
-        this.body.quaternion.set(mouse.rotation.x, mouse.rotation.y, mouse.rotation.z, mouse.rotation.w);
+        this.lookingAt.set(mouse.rotation.x, mouse.rotation.y, mouse.rotation.z, mouse.rotation.w);
     }
 
     serialize():Serialized.Player {
