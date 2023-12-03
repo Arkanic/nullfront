@@ -9,6 +9,7 @@ import Player from "./components/player";
 import Me from "./components/me";
 import Entity from "./components/entity";
 import Beachball from "./components/beachball";
+import Barrel from "./components/barrel";
 import {SkimDifference} from "../../../shared/util/skim";
 
 import {floorMaterial} from "./materials";
@@ -104,6 +105,8 @@ class Game {
         let entity:Entity;
         if(data.type == "beachball") {
             entity = new Beachball(this.scene);
+        } else if(data.type == "barrel") {
+            entity = new Barrel(this.scene);
         } else {
             entity = new Beachball(this.scene); // replace with error model soon
         }

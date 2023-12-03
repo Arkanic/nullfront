@@ -8,6 +8,7 @@ import Socket from "./socket";
 import Entity from "./entities/entity";
 import Player from "./entities/player";
 import Beachball from "./entities/beachball";
+import Barrel from "./entities/barrel";
 import Physics from "./physics";
 
 import * as Data from "../shared/types/inputObject";
@@ -19,6 +20,7 @@ class Game {
     sockets:{[key:string]:Socket};
     players:{[key:string]:Player};
     entities:{[key:string]:Entity};
+    staticEntities:{[key:string]:Entity};
 
     physics:Physics;
 
@@ -29,6 +31,7 @@ class Game {
         this.sockets = {};
         this.players = {};
         this.entities = {};
+        this.staticEntities = {};
 
         this.physics = new Physics();
 
@@ -39,8 +42,14 @@ class Game {
 
         for(let i = 0; i < 10; i++) {
             let beachball = new Beachball(uuid());
-            beachball.setPosition((Math.random() * 20) - 10, (Math.random() * 20) - 10, (Math.random() * 20) - 10); 
+            beachball.setPosition((Math.random() * 20) - 10, 2, (Math.random() * 20) - 10); 
             this.addEntity(beachball);
+        }
+
+        for(let i = 0; i < 5; i++) {
+            let barrel = new Barrel(uuid());
+            barrel.setPosition((Math.random() * 20) - 10, 1, (Math.random() * 20) - 10);
+            this.addEntity(barrel);
         }
 
         console.log("Game initialised");
@@ -56,6 +65,19 @@ class Game {
         delete this.entities[id];
     }
 
+    /**
+     * Add entity which is a static body.
+     * This will place it in the "staticEntities" group so that it only gets sent to the client once,
+     * when they first join. Saves unecessary skim calculation, i.e. if there are a lot of static bodies.
+     * Cannot be removed as they are static, should not change. If a physically static body needs to be
+     * removed, it should go in the normal entities group.
+     */
+    addStaticEntity(entity:Entity):void {
+        if(!((entity.body.type == cannon.BODY_TYPES.STATIC) || (entity.body.mass == 0))) throw new Error(`Tried to add static entity that was not static ("${entity.type}")`);
+        this.staticEntities[entity.id] = entity;
+        this.physics.world.addBody(entity.body);
+    }
+
     addPlayer(socket:io.Socket, data:Data.Join):void {
         this.sockets[socket.id] = new Socket(socket);
 
@@ -63,6 +85,8 @@ class Game {
         this.players[socket.id] = new Player(socket.id, striptags(data.username), position);
 
         this.physics.world.addBody(this.players[socket.id].body);
+
+        this.sendInitData(socket);
     }
 
     removePlayer(socket:io.Socket):void {
@@ -106,6 +130,18 @@ class Game {
         });
 
         this.then = this.now;
+    }
+
+    sendInitData(socket:io.Socket) {
+        socket.emit(constants.msg.initdata, this.createInitData());
+    }
+
+    createInitData():serializedData.InitData {
+        const staticEntities = Object.values<Entity>(this.staticEntities);
+
+        return {
+            staticEntities: staticEntities.map(e => e.serialize())
+        }
     }
 
     createUpdate(player:Player, socket:Socket):serializedData.WorldSkim {

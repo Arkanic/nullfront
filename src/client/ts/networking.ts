@@ -1,7 +1,7 @@
 import io, * as socketio from "socket.io-client";
 import {throttle} from "throttle-debounce";
 import constants from "../../shared/constants";
-import {handleGameUpdate} from "./handler";
+import {handleGameUpdate, handleInitData} from "./handler";
 import * as Data from "../../shared/types/inputObject";
 
 const protocol:string = (window.location.protocol.includes("https")) ? "wss" : "ws";
@@ -22,6 +22,7 @@ export function connect() {
     connected.then(() => {
         console.log("Starting handlers");
         socket.on(constants.msg.update, handleGameUpdate);
+        socket.on(constants.msg.initdata, handleInitData);
         socket.on(constants.msg.serverclosing, function (data:any) {
             disconnectMessage = data.message;
             document.getElementById("disconnect-message")!.innerHTML = data.message;

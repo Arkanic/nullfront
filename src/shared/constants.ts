@@ -13,6 +13,7 @@ const constants = {
     msg: {
         join: "joingame",
         serverclosing: "endgame",
+        initdata: "initdata",
         update: "update",
         keyboardinput: "keyboardupdate",
         mouseinput: "mouseupdate"

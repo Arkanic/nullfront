@@ -7,7 +7,8 @@ class Beachball extends Entity {
         this.type = "beachball";
         
         this.body = new cannon.Body({
-            mass: 1
+            mass: 1,
+            linearDamping: 0.3
         });
         this.body.addShape(new cannon.Sphere(1));
     }

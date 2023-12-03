@@ -3,6 +3,12 @@ import {SkimDifference} from "../../shared/util/skim";
 
 const renderdelay:number = 1000/60;
 
+let initData:serialized.InitData = {
+    staticEntities: []
+}
+let initDataRead = false;
+let initDataSet = false;
+
 const gameUpdates:Array<serialized.World> = [];
 let gameStart:number = 0;
 let firstServerTimestamp:number = 0;
@@ -50,6 +56,16 @@ export function processGameUpdate(update:serialized.World, difference:serialized
 
     mergeSkimDifference(worldDifference.entities, difference.entities);
     mergeSkimDifference(worldDifference.others, difference.others);
+
+    if(initDataSet && !initDataRead) { // make game think static entities are "new" entities
+        worldDifference.entities.added = worldDifference.entities.added.concat(initData.staticEntities.map(e => e.id));
+        initDataRead = true; // don't do this again
+    }
+}
+
+export function processInitData(data:serialized.InitData) {
+    initData = data;
+    initDataSet = true;
 }
 
 /**
@@ -109,10 +125,13 @@ export function getCurrentState():serialized.World {
         const baseUpdate:serialized.World = gameUpdates[base];
         const next:serialized.World = gameUpdates[base + 1];
         const ratio:number = padRatio((serverTime - baseUpdate.time) / (next.time - baseUpdate.time));
+
+        let entities = interpolateObjectArray<serialized.Entity>(baseUpdate.entities, next.entities, ratio);
+        entities = entities.concat(initData.staticEntities);
         return {
             me: interpolateObject<serialized.Player>(baseUpdate.me, next.me, ratio),
             others: interpolateObjectArray<serialized.Player>(baseUpdate.others, next.others, ratio),
-            entities: interpolateObjectArray<serialized.Entity>(baseUpdate.entities, next.entities, ratio),
+            entities,
             time: interpolateNumber(baseUpdate.time, next.time, ratio)
         }
     }

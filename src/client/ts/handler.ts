@@ -1,4 +1,4 @@
-import {processGameUpdate, getCurrentState} from "./state";
+import {processInitData, processGameUpdate, getCurrentState} from "./state";
 import * as serialized from "../../shared/types/serializedData";
 import * as skimmer from "../../shared/util/skim";
 import {updateGame} from "./render";
@@ -36,4 +36,8 @@ export function handleGameUpdate(update:serialized.WorldSkim):void {
     world = fullWorld;
 
     updateGame();
+}
+
+export function handleInitData(data:serialized.InitData):void {
+    processInitData(data);
 }

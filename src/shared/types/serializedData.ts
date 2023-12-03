@@ -24,6 +24,10 @@ export interface Player extends Entity {
     username:string;
 }
 
+export interface InitData {
+    staticEntities:Array<Entity>;
+}
+
 export interface World {
     time:number;
     me:Player;
