@@ -7,7 +7,8 @@ export function newBeachball(id:string):PassiveEntity {
     return new PassiveEntity(id, "beachball", new cannon.Body({
         shape: new cannon.Sphere(1),
         mass: 1,
-        linearDamping: 0.3
+        linearDamping: 0.3,
+        angularDamping: 0.3
     }));
 }
 
