@@ -24,6 +24,7 @@ class Player extends Entity {
         this.body = new cannon.Body({
             mass: 70,
             linearDamping: 0.99,
+            angularDamping: 0.5,
             material: playerMaterial
         });
         this.body.addShape(new cannon.Sphere(1));
