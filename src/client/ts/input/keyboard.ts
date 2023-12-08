@@ -6,7 +6,8 @@ let keyboardKeys:{[unit:string]:number} = {
     a:65,
     s:83,
     d:68,
-    space:32
+    space:32,
+    e: 69
 }
 let keys:{[unit:string]:boolean} = {};
 

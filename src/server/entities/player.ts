@@ -5,6 +5,7 @@ import * as Data from "../../shared/types/inputObject";
 import * as Serialized from "../../shared/types/serializedData";
 import {Vector3} from "three";
 import * as cannon from "cannon-es";
+import {throttle, debounce} from "throttle-debounce";
 import {playerMaterial} from "../physics/materials";
 
 class Player extends Entity {
@@ -12,6 +13,8 @@ class Player extends Entity {
     keys:Data.KeyboardInput;
     canJump:boolean;
     lookingAt:cannon.Quaternion;
+
+    private interactThrottle:debounce<() => void>;
 
     constructor(id:string, username:string, position:Vector3) {
         super(id);
@@ -31,7 +34,8 @@ class Player extends Entity {
             a: false,
             s: false,
             d: false,
-            space: false
+            space: false,
+            e: false
         }
 
         this.canJump = false;
@@ -52,6 +56,8 @@ class Player extends Entity {
                 this.canJump = true;
             }
         });
+
+        this.interactThrottle = debounce(400, this.interact.bind(this));
     }
 
     update() {
@@ -75,6 +81,14 @@ class Player extends Entity {
             this.body.velocity.y += constants.player.jumpspeed;
             this.canJump = false;
         }
+
+        // interact
+        if(this.keys.e) this.interactThrottle();
+    }
+
+    interact() {
+        // do something!
+        console.log("interact 2");
     }
 
     translateKeyboardInput(keys:Data.KeyboardInput):void {
