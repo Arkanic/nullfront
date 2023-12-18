@@ -26,6 +26,19 @@ abstract class Entity {
         }
     }
 
+    setRotation(x:cannon.Quaternion):void;
+    setRotation(x:number, y:number, z:number, w:number):void;
+    setRotation(x:number | cannon.Quaternion, y?:number, z?:number, w?:number):void {
+        if(x instanceof cannon.Quaternion) {
+            this.body.quaternion.set(x.x, x.y, x.z, x.w);
+        } else {
+            this.body.quaternion.x = x;
+            this.body.quaternion.y = y as number;
+            this.body.quaternion.z = z as number;
+            this.body.quaternion.w = w as number;
+        }
+    }
+
     update():void {
     }
 
