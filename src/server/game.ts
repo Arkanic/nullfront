@@ -42,15 +42,15 @@ class Game {
 
         this.addEntity(entities.newGround(uuid()));
 
-        for(let i = 0; i < 10; i++) {
+        for(let i = 0; i < 200; i++) {
             let beachball = entities.newBeachball(uuid());
-            beachball.setPosition((Math.random() * 20) - 10, 2, (Math.random() * 20) - 10); 
+            beachball.setPosition((Math.random() * constants.map.maxsize.x) - (constants.map.maxsize.x / 2), 2, (Math.random() * constants.map.maxsize.y) - (constants.map.maxsize.y / 2)); 
             this.addEntity(beachball);
         }
 
-        for(let i = 0; i < 5; i++) {
+        for(let i = 0; i < 400; i++) {
             let barrel = entities.newBarrel(uuid());
-            barrel.setPosition((Math.random() * 20) - 10, 1, (Math.random() * 20) - 10);
+            barrel.setPosition((Math.random() * constants.map.maxsize.x) - (constants.map.maxsize.x / 2), 0.440, (Math.random() * constants.map.maxsize.y) - (constants.map.maxsize.y / 2)); 
             this.addEntity(barrel);
         }
 
