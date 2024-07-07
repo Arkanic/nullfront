@@ -40,7 +40,7 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.scss$/,
+                test: /\.css$/,
                 exclude: /node_modules/,
                 use: [
                     {
@@ -61,9 +61,6 @@ module.exports = {
                             modules: false,
                             sourceMap: false
                         }
-                    },
-                    {
-                        loader: "sass-loader"
                     }
                 ]
             },

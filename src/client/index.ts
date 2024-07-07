@@ -1,4 +1,4 @@
-import "./css/main.scss";
+import "./css/main.css";
 
 import * as state from "./ts/state";
 import * as networking from "./ts/networking";

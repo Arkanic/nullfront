@@ -24,18 +24,18 @@ html, body {
     bottom: 0;
 
     background-color: rgba(0, 0, 0, 0.75);
+}
 
-    div {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translateY(-50%) translateX(-50%);
-        padding: 15px 20px 5px 5px;
+.disconnected div {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    padding: 15px 20px 5px 5px;
 
-        background-color: white;
-        border-radius: 5px;
-        text-align: center;
-    }
+    background-color: white;
+    border-radius: 5px;
+    text-align: center;
 }
 
 canvas {
@@ -51,14 +51,14 @@ button {
     padding: 5px 20px;
     border-radius: 3px;
     transition: background-color 0.2s ease;
+}
 
-    &:hover {
-        background: rgb(230, 230, 230);
-    }
+button:hover {
+    background: rgb(230, 230, 230);
+}
 
-    &:focus {
-        outline: none; // prevent default behavior
-    }
+button:focus {
+    outline: none;
 }
 
 .play-menu {
@@ -76,22 +76,22 @@ button {
     background-color: white;
     border-radius: 5px;
     text-align: center;
+}
 
-    p {
-        margin-bottom: 0;
-    }
+.play-menu p {
+    margin-bottom: 0;
+}
 
-    input {
-        font-size: 18px;
-        outline: none;
-        border: none;
-        border-bottom: 1px solid black;
-        margin-bottom: 5px;
-        padding: 3px;
-        text-align: center;
+.play-menu input {
+    font-size: 18px;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid black;
+    margin-bottom: 5px;
+    padding: 3px;
+    text-align: center;
+}
 
-        &:hover {
-            outline: none; // once again, prevent default behaviour
-        }
-    }
+.play-menu input:hover {
+    outline: none; /* once again, prevent default behaviour */
 }
