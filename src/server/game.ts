@@ -6,6 +6,7 @@ import {v4 as uuid} from "uuid";
 import Socket from "./socket";
 
 import Entity from "./entities/entity";
+import Beachball from "./entities/beachball";
 import Player from "./entities/player";
 import * as entities from "./entities";
 import Physics from "./physics";
@@ -43,8 +44,9 @@ class Game {
         this.addEntity(entities.newGround(uuid()));
 
         for(let i = 0; i < 200; i++) {
-            let beachball = entities.newBeachball(uuid());
-            beachball.setPosition((Math.random() * constants.map.maxsize.x) - (constants.map.maxsize.x / 2), 2, (Math.random() * constants.map.maxsize.y) - (constants.map.maxsize.y / 2)); 
+            let radius = Math.round(Math.random() * 100);
+            let beachball = new Beachball(uuid(), radius);
+            beachball.setPosition((Math.random() * constants.map.maxsize.x) - (constants.map.maxsize.x / 2), radius + 2, (Math.random() * constants.map.maxsize.y) - (constants.map.maxsize.y / 2)); 
             this.addEntity(beachball);
         }
 
@@ -122,7 +124,7 @@ class Game {
         this.now = Date.now();
         let dt = (this.now - this.then) / 1000;
 
-        this.physics.world.step(1 / 60, dt, 3);
+        this.physics.world.step(dt, dt, 3);
 
         Object.keys(this.sockets).forEach(id => {
             const socket = this.sockets[id].socket;

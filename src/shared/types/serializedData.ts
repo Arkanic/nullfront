@@ -24,6 +24,10 @@ export interface Player extends Entity {
     username:string;
 }
 
+export interface Beachball extends Entity {
+    radius:number;
+}
+
 export interface InitData {
     staticEntities:Array<Entity>;
 }
