@@ -17,7 +17,7 @@ export const playerGeometry = new three.SphereGeometry(1);
 const floorTexture = load("./grass_floor.jpg");
 floorTexture.wrapS = three.RepeatWrapping;
 floorTexture.wrapT = three.RepeatWrapping;
-floorTexture.repeat.set(constants.map.maxsize.x / 64, constants.map.maxsize.y / 64);
+floorTexture.repeat.set(constants.map.maxsize.x / 16, constants.map.maxsize.y / 16);
 export const floorMaterial = new three.MeshPhongMaterial();
 floorMaterial.map = floorTexture;
 
