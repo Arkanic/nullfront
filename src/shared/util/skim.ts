@@ -25,13 +25,13 @@ export function skimArray<T extends Entity>(now:Array<T>, then:Array<T>):Skim<T>
     let nowObj = objectify(now);
     let thenObj = objectify(then);
 
-    let addedIds = Object.keys(nowObj).filter(x => !Object.keys(thenObj).includes(x));
+    let addedIds = Object.keys(nowObj).filter(x => !thenObj[x]);
     let added = addedIds.map(i => nowObj[i]);
 
-    let removedIds = Object.keys(thenObj).filter(x => !Object.keys(nowObj).includes(x));
+    let removedIds = Object.keys(thenObj).filter(x => !nowObj[x]);
     let removed = removedIds.map(i => thenObj[i]);
 
-    let persistsIds = Object.keys(nowObj).filter(x => Object.keys(thenObj).includes(x));
+    let persistsIds = Object.keys(nowObj).filter(x => thenObj[x]);
     let modifiedIds = persistsIds.filter(x => !(_.isEqual(nowObj[x], thenObj[x])));
     let modified = modifiedIds.map(i => nowObj[i]);
 

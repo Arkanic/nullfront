@@ -12,7 +12,7 @@ class Beachball extends Entity {
         this.radius = radius;
         this.body = new cannon.Body({
             shape: new cannon.Sphere(radius),
-            mass: 1,
+            mass: radius * radius * radius * 4,
             linearDamping: 0.3,
             angularDamping: 0.3
         });

@@ -28,6 +28,9 @@ class Game {
     private then:number
     private now:number
 
+    private interval:NodeJS.Timeout
+    running:boolean;
+
     constructor() {
         this.sockets = {};
         this.players = {};
@@ -39,7 +42,9 @@ class Game {
         this.then = Date.now();
         this.now = 0;
 
-        setInterval(this.update.bind(this), 1000 / 60);
+        this.interval = setTimeout(() => {});
+        this.running = false;
+        this.resumeGame(); // let run for initial load
 
         this.addEntity(entities.newGround(uuid()));
 
@@ -57,6 +62,23 @@ class Game {
         }
 
         console.log("Game initialised");
+    }
+
+    pauseGame():void {
+        console.log("Pausing game");
+        clearInterval(this.interval);
+        this.running = true;
+    }
+
+    resumeGame():void {
+        if(this.gameRunning()) return;
+        console.log("Resuming game");
+        this.interval = setInterval(this.update.bind(this), 1000 / 30);
+        this.running = false;
+    }
+
+    gameRunning():boolean {
+        return this.running;
     }
 
     addEntity(entity:Entity):void {
@@ -83,6 +105,8 @@ class Game {
     }
 
     addPlayer(socket:io.Socket, data:Data.Join):void {
+        if(!this.gameRunning()) this.resumeGame(); // unpause if paused
+
         this.sockets[socket.id] = new Socket(socket);
 
         const position = new Vector3((Math.random() * 10) - 5, 10, (Math.random() * 10) - 5);
@@ -98,6 +122,12 @@ class Game {
 
         delete this.players[socket.id];
         delete this.sockets[socket.id];
+
+        if(this.playerCount() == 0) this.pauseGame();
+    }
+
+    playerCount():number {
+        return Object.keys(this.players).length;
     }
 
     handleKeyboardInput(socket:io.Socket, state:Data.KeyboardInput):void {
